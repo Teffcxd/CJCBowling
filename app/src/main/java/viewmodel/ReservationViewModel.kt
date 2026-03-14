@@ -3,8 +3,7 @@ package com.example.bowlingapp.viewmodel
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import model.Reservation
-import repository.ReservationRepository
-
+import com.example.bowlingapp.repository.ReservationRepository
 class ReservationViewModel(
     private val repository: ReservationRepository
 ) : ViewModel() {
