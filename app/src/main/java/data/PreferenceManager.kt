@@ -4,7 +4,7 @@ import android.content.Context
 import model.Reservation
 import org.json.JSONArray
 import org.json.JSONObject
-
+// CJ Parte de los dos
 class ReservationPreferences(context: Context) {
 
     private val prefs =
