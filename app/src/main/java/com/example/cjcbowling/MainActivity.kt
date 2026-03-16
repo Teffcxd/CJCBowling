@@ -7,3 +7,21 @@ import com.example.bowlingapp.data.ReservationPreferences
 import com.example.bowlingapp.repository.ReservationRepository
 import com.example.bowlingapp.view.screens.DashboardScreen
 import com.example.bowlingapp.viewmodel.ReservationViewModel
+
+class MainActivity : ComponentActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+        super.onCreate(savedInstanceState)
+
+        val prefs = ReservationPreferences(this)
+
+        val repository = ReservationRepository(prefs)
+
+        val viewModel = ReservationViewModel(repository)
+
+        setContent {
+            DashboardScreen(viewModel)
+        }
+    }
+}
