@@ -1,8 +1,8 @@
 
-package com.example.bowlingapp.repository
+package com.example.cjcbowling.repository
 
-import com.example.bowlingapp.data.ReservationPreferences
-import model.Reservation
+import com.example.cjcbowling.data.ReservationPreferences
+import com.example.cjcbowling.model.Reservation
 
 class ReservationRepository(
     private val prefs: ReservationPreferences
@@ -15,25 +15,20 @@ class ReservationRepository(
     fun insert(reservation: Reservation) {
 
         val list = prefs.getReservations()
-
         list.add(reservation)
-
         prefs.saveReservations(list)
     }
 
     fun delete(reservation: Reservation) {
 
         val list = prefs.getReservations()
-
         list.removeIf { it.id == reservation.id }
-
         prefs.saveReservations(list)
     }
 
     fun update(reservation: Reservation) {
 
         val list = prefs.getReservations()
-
         val index = list.indexOfFirst { it.id == reservation.id }
 
         if (index != -1) {
