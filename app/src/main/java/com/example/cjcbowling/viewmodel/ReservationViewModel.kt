@@ -2,7 +2,7 @@ package com.example.cjcbowling.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
-import model.Reservation
+import com.example.cjcbowling.model.Reservation
 import com.example.cjcbowling.repository.ReservationRepository
 class ReservationViewModel(
     private val repository: ReservationRepository
@@ -17,7 +17,6 @@ class ReservationViewModel(
     fun loadReservations() {
 
         reservations.clear()
-
         reservations.addAll(repository.getAll())
     }
 

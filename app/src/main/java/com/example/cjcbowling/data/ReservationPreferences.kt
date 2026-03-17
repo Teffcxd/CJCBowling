@@ -1,7 +1,7 @@
 package com.example.cjcbowling.data
 
 import android.content.Context
-import model.Reservation
+import com.example.cjcbowling.model.Reservation
 import org.json.JSONArray
 import org.json.JSONObject
 // CJ Parte de los dos
@@ -57,8 +57,6 @@ class ReservationPreferences(context: Context) {
             jsonArray.put(obj)
         }
 
-        prefs.edit()
-            .putString("reservations", jsonArray.toString())
-            .apply()
+        prefs.edit().putString("reservations", jsonArray.toString()).apply()
     }
 }

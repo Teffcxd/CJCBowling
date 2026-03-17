@@ -2,7 +2,7 @@ package com.example.cjcbowling.view.components
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import model.Reservation
+import com.example.cjcbowling.model.Reservation
 
 @Composable
 fun ReservationItem(

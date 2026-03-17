@@ -1,4 +1,4 @@
-package model
+package com.example.cjcbowling.model
 
 data class Reservation(
     val id: Int = 0,

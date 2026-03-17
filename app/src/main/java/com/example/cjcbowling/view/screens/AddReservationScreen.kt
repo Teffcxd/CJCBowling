@@ -2,7 +2,7 @@ package com.example.cjcbowling.view.screens
 //
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import model.Reservation
+import com.example.cjcbowling.model.Reservation
 import com.example.cjcbowling.viewmodel.ReservationViewModel
 
 @Composable

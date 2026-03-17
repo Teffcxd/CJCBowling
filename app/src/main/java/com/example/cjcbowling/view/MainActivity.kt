@@ -1,3 +1,4 @@
+
 package com.example.cjcbowling.view
 
 import android.os.Bundle
@@ -15,9 +16,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val prefs = ReservationPreferences(this)
-
         val repository = ReservationRepository(prefs)
-
         val viewModel = ReservationViewModel(repository)
 
         setContent {
