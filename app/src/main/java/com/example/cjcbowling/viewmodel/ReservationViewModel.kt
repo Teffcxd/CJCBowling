@@ -52,8 +52,11 @@ class ReservationViewModel(
 
     fun searchReservation(name: String) {
 
-        reservations.clear()
-
-        reservations.addAll(repository.search(name))
+        if (name.isEmpty()) {
+            loadReservations()
+        } else {
+            reservations.clear()
+            reservations.addAll(repository.search(name))
+        }
     }
 }
