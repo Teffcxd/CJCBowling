@@ -1,4 +1,4 @@
-package com.example.bowlingapp.data
+package com.example.cjcbowling.data
 
 import android.content.Context
 import model.Reservation

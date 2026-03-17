@@ -1,7 +1,7 @@
 
-package com.example.bowlingapp.repository
+package com.example.cjcbowling.repository
 
-import com.example.bowlingapp.data.ReservationPreferences
+import com.example.cjcbowling.data.ReservationPreferences
 import model.Reservation
 
 class ReservationRepository(
