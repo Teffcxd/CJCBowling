@@ -1,9 +1,9 @@
-package com.example.bowlingapp.viewmodel
+package com.example.cjcbowling.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import model.Reservation
-import com.example.bowlingapp.repository.ReservationRepository
+import com.example.cjcbowling.repository.ReservationRepository
 class ReservationViewModel(
     private val repository: ReservationRepository
 ) : ViewModel() {

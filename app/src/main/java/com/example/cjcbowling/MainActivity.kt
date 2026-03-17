@@ -1,47 +1,27 @@
-package com.example.cjcbowling
+package com.example.cjcbowling.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.cjcbowling.ui.theme.CJCBowlingTheme
-//
+import com.example.cjcbowling.data.ReservationPreferences
+import com.example.cjcbowling.repository.ReservationRepository
+//import com.example.cjcbowling.view.screens.DashboardScreen
+import com.example.cjcbowling.viewmodel.ReservationViewModel
+
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
+        val prefs = ReservationPreferences(this)
+
+        val repository = ReservationRepository(prefs)
+
+        val viewModel = ReservationViewModel(repository)
+
         setContent {
-            CJCBowlingTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            //DashboardScreen(viewModel)
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    CJCBowlingTheme {
-        Greeting("Android")
     }
 }
