@@ -22,19 +22,75 @@ fun EditReservationScreen(
     var time by remember { mutableStateOf(reservation.time) }
     var status by remember { mutableStateOf(reservation.status) }
 
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    var error by remember { mutableStateOf("") }
+
+    var dateError by remember { mutableStateOf(false) }
+    var timeError by remember { mutableStateOf(false) }
+    var clientError by remember { mutableStateOf(false) }
+
+    Column(modifier = Modifier.padding(16.dp)) {
 
         Text("Editar Reserva", style = MaterialTheme.typography.titleLarge)
 
         Spacer(modifier = Modifier.height(10.dp))
 
-        TextField(value = client, onValueChange = { client = it }, label = { Text("Cliente") })
-        TextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") })
-        TextField(value = lane, onValueChange = { lane = it }, label = { Text("Pista") })
-        TextField(value = date, onValueChange = { date = it }, label = { Text("Fecha") })
-        TextField(value = time, onValueChange = { time = it }, label = { Text("Hora") })
+
+        TextField(
+            value = client,
+            onValueChange = {
+                client = it
+                clientError = it.isEmpty() || it.any { char -> char.isDigit() }
+            },
+            label = { Text("Cliente") },
+            isError = clientError
+        )
+
+        if (clientError) {
+            Text("Nombre inválido", color = MaterialTheme.colorScheme.error)
+        }
+
+        TextField(
+            value = phone,
+            onValueChange = { phone = it },
+            label = { Text("Teléfono") }
+        )
+
+
+        TextField(
+            value = lane,
+            onValueChange = { lane = it },
+            label = { Text("Pista") }
+        )
+
+
+        TextField(
+            value = date,
+            onValueChange = {
+                date = it
+                dateError = !isValidDate(it) && it.isNotEmpty()
+            },
+            label = { Text("Fecha (dd/mm/yyyy)") },
+            isError = dateError
+        )
+
+        if (dateError) {
+            Text("Fecha inválida", color = MaterialTheme.colorScheme.error)
+        }
+
+
+        TextField(
+            value = time,
+            onValueChange = {
+                time = it
+                timeError = !isValidTime(it) && it.isNotEmpty()
+            },
+            label = { Text("Hora (HH:mm)") },
+            isError = timeError
+        )
+
+        if (timeError) {
+            Text("Hora inválida", color = MaterialTheme.colorScheme.error)
+        }
 
         Spacer(modifier = Modifier.height(10.dp))
 
@@ -57,24 +113,38 @@ fun EditReservationScreen(
 
         Button(onClick = {
 
-            if (lane.isNotEmpty()) {
+            when {
+                client.isEmpty() || client.any { it.isDigit() } -> error = "Nombre inválido"
+                !isValidPhone(phone) -> error = "Teléfono inválido"
+                lane.isEmpty() || lane.toIntOrNull() == null -> error = "Pista inválida"
+                !isValidDate(date) -> error = "Fecha inválida"
+                !isValidTime(time) -> error = "Hora inválida"
 
-                val updated = reservation.copy(
-                    clientName = client,
-                    phone = phone,
-                    lane = lane.toInt(),
-                    date = date,
-                    time = time,
-                    status = status
-                )
+                else -> {
 
-                viewModel.updateReservation(updated)
+                    val updated = reservation.copy(
+                        clientName = client,
+                        phone = phone,
+                        lane = lane.toInt(),
+                        date = date,
+                        time = time,
+                        status = status
+                    )
 
-                onFinish()
+                    viewModel.updateReservation(updated)
+
+                    error = ""
+                    onFinish()
+                }
             }
 
         }) {
             Text("Actualizar Reserva")
+        }
+
+        if (error.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(error, color = MaterialTheme.colorScheme.error)
         }
     }
 }
