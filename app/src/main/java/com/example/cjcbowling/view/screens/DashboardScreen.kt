@@ -1,17 +1,21 @@
 package com.example.cjcbowling.view.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.example.cjcbowling.model.Reservation
 import com.example.cjcbowling.viewmodel.ReservationViewModel
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun DashboardScreen(viewModel: ReservationViewModel) {
 
     var screen by remember { mutableStateOf("home") }
-    var selectedReservation by remember { mutableStateOf<com.example.cjcbowling.model.Reservation?>(null) }
+    var selectedReservation by remember { mutableStateOf<Reservation?>(null) }
 
     val reservations = viewModel.reservations
 
@@ -19,52 +23,137 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
     val active = reservations.count { it.status == "Activa" }
     val finished = reservations.count { it.status == "Finalizada" }
 
+    // 🔥 NUEVO: Próxima reserva
+    val nextReservation = reservations
+        .filter { it.status == "Activa" }
+        .minByOrNull { it.date + it.time }
+
+    // 🔥 NUEVO: Reservas de hoy (simple)
+    val today = "18/03/2026" // luego lo puedes hacer dinámico
+    val todayReservations = reservations.filter { it.date == today }
+
     when (screen) {
 
         "home" -> {
 
-            Column(
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(20.dp)
+                    .background(
+                        Brush.verticalGradient(
+                            colors = listOf(
+                                Color(0xFF2C2C54),
+                                Color(0xFF5A189A),
+                                Color(0xFF9D4EDD)
+                            )
+                        )
+                    )
+                    .padding(16.dp)
             ) {
 
-                Text(
-                    text = "🎳 CJC Bowling 🎳 ",
-                    style = MaterialTheme.typography.headlineMedium
-                )
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Button(
-                    onClick = { screen = "list" },
-                    modifier = Modifier.fillMaxWidth()
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(20.dp)
                 ) {
-                    Text("Ver Reservas")
-                }
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    Text(
+                        text = "🎳 CJC Bowling",
+                        style = MaterialTheme.typography.headlineLarge,
+                        color = Color.White
+                    )
 
-                Button(
-                    onClick = { screen = "add" },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Nueva Reserva")
-                }
+                    // 👋 NUEVO: Bienvenida
+                    Text(
+                        text = "👋 Bienvenido",
+                        color = Color.White
+                    )
 
-                Spacer(modifier = Modifier.height(30.dp))
+                    Text(
+                        text = "Gestiona tus reservas fácilmente",
+                        color = Color.White
+                    )
 
-                Card(modifier = Modifier.fillMaxWidth()) {
+                    // 🎯 NUEVO: Próxima reserva
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(10.dp)
+                    ) {
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            Text("🎯 Próxima reserva")
 
-                    Column(modifier = Modifier.padding(16.dp)) {
+                            if (nextReservation != null) {
+                                Text("Cliente: ${nextReservation.clientName}")
+                                Text("Hora: ${nextReservation.time}")
+                                Text("Pista: ${nextReservation.lane}")
+                            } else {
+                                Text("No hay reservas próximas")
+                            }
+                        }
+                    }
 
-                        Text("📊 Resumen")
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(12.dp)
+                    ) {
 
-                        Spacer(modifier = Modifier.height(10.dp))
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
 
-                        Text("Total: $total")
-                        Text("Activas: $active")
-                        Text("Finalizadas: $finished")
+                            Text(
+                                "📊 Resumen",
+                                style = MaterialTheme.typography.titleLarge
+                            )
+
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text("Total: $total")
+                                Text("Activas: $active")
+                                Text("Finalizadas: $finished")
+                            }
+                        }
+                    }
+
+                    // 📅 NUEVO: reservas de hoy
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(8.dp)
+                    ) {
+                        Text(
+                            text = "📅 Hoy: ${todayReservations.size} reservas",
+                            modifier = Modifier.padding(16.dp)
+                        )
+                    }
+
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = CardDefaults.cardElevation(10.dp)
+                    ) {
+
+                        Column(
+                            modifier = Modifier.padding(16.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+
+                            Button(
+                                onClick = { screen = "list" },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("📋 Ver Reservas")
+                            }
+
+                            Button(
+                                onClick = { screen = "add" },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text("➕ Nueva Reserva")
+                            }
+                        }
                     }
                 }
             }
@@ -72,49 +161,65 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
 
         "add" -> {
 
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
 
-                Button(onClick = { screen = "home" }) {
+                Button(
+                    onClick = { screen = "home" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text("⬅ Volver")
                 }
 
-                AddReservationScreen(viewModel,
-                onFinish = { screen ="home"}
+                AddReservationScreen(
+                    viewModel,
+                    onFinish = { screen = "home" }
                 )
             }
         }
 
         "list" -> {
 
-            Column {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
 
-                Button(onClick = { screen = "home" }) {
+                Button(
+                    onClick = { screen = "home" },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
                     Text("⬅ Volver")
                 }
 
                 ReservationListScreen(
                     viewModel,
-                    onEdit ={
-                    selectedReservation = it
-                    screen = "edit"
-                })
+                    onEdit = {
+                        selectedReservation = it
+                        screen = "edit"
+                    }
+                )
             }
         }
 
         "edit" -> {
             selectedReservation?.let {
 
-                Column {
-                    Button(onClick = { screen = "list" }) {
-                        Text("⬅ Volver")
-                    }
-
-                    EditReservationScreen(
-                        viewModel,
-                        reservation = it,
-                        onFinish = { screen = "list" }
-                    )
-                }
+                EditReservationScreen(
+                    viewModel = viewModel,
+                    reservation = it,
+                    onFinish = { screen = "list" }
+                )
             }
         }
     }
