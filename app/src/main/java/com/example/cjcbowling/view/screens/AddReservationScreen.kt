@@ -1,9 +1,12 @@
 package com.example.cjcbowling.view.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.cjcbowling.model.Reservation
 import com.example.cjcbowling.viewmodel.ReservationViewModel
@@ -42,123 +45,205 @@ fun isValidPhone(phone: String): Boolean {
 }
 
 @Composable
-fun AddReservationScreen(viewModel: ReservationViewModel, onFinish: () -> Unit) {
+fun AddReservationScreen(
+    viewModel: ReservationViewModel,
+    onFinish: () -> Unit
+) {
 
     var client by remember { mutableStateOf("") }
     var phone by remember { mutableStateOf("") }
     var lane by remember { mutableStateOf("") }
     var date by remember { mutableStateOf("") }
     var time by remember { mutableStateOf("") }
+
     var error by remember { mutableStateOf("") }
     var dateError by remember { mutableStateOf(false) }
     var timeError by remember { mutableStateOf(false) }
     var clientError by remember { mutableStateOf(false) }
 
-
-    Column(modifier = Modifier.padding(16.dp)) {
-
-        TextField(
-            value = client,
-            onValueChange = {
-                client = it
-                clientError = it.isEmpty() || it.any { char -> char.isDigit() }
-            },
-            label = { Text("Cliente") },
-            isError = clientError
-        )
-
-        if (clientError) {
-            Text(
-                "Nombre inválido (no números)",
-                color = MaterialTheme.colorScheme.error
-            )
-        }
-
-        when {
-            client.isEmpty() || client.any { it.isDigit() } ->
-                error = "Nombre inválido"
-        }
-        TextField(value = phone, onValueChange = { phone = it }, label = { Text("Teléfono") })
-        TextField(value = lane, onValueChange = { lane = it }, label = { Text("Pista") })
-        TextField(
-            value = date,
-            onValueChange = {
-                date = it
-                dateError = !isValidDate(it) && it.isNotEmpty()
-            },
-            label = { Text("Fecha (dd/mm/yyyy)") },
-            isError = dateError
-        )
-
-        if (dateError) {
-            Text("Formato inválido", color = MaterialTheme.colorScheme.error)
-        }
-        TextField(
-            value = time,
-            onValueChange = {
-                time = it
-                timeError = !isValidTime(it) && it.isNotEmpty()
-            },
-            label = { Text("Hora (HH:mm)") },
-            isError = timeError
-        )
-
-        if (timeError) {
-            Text("Hora inválida", color = MaterialTheme.colorScheme.error)
-        }
-
-        Spacer(modifier = Modifier.height(10.dp))
-
-        Button(onClick = {
-
-            when {
-                client.isEmpty() -> error = "El cliente es obligatorio"
-                !isValidPhone(phone) -> error = "Teléfono inválido"
-                lane.isEmpty() || lane.toIntOrNull() == null -> error = "Pista inválida"
-                !isValidDate(date) -> error = "Fecha inválida (dd/mm/yyyy)"
-                !isValidTime(time) -> error = "Hora inválida (HH:mm)"
-
-                else -> {
-
-                    val exists = viewModel.reservations.any {
-                        it.lane == lane.toInt() && it.date == date && it.time == time
-                    }
-
-                    if (exists) {
-                        error = "Esa pista ya está reservada en ese horario"
-                        return@Button
-                    }
-
-                    val reservation = Reservation(
-                        id = System.currentTimeMillis().toInt(),
-                        clientName = client,
-                        phone = phone,
-                        lane = lane.toInt(),
-                        date = date,
-                        time = time,
-                        status = "Activa"
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color(0xFF5a189a), // Tu color original
+                        Color(0xFF9567bc), // Tono más claro
+                        Color(0xFFcbb1de)
                     )
+                )
+            )
+            .padding(16.dp)
+    ) {
 
-                    viewModel.addReservation(reservation)
+        // 🧾 CARD PRINCIPAL (CONTRASTE PRO)
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(12.dp),
+            shape = MaterialTheme.shapes.large
+        ) {
 
-                    client = ""
-                    phone = ""
-                    lane = ""
-                    date = ""
-                    time = ""
-                    error = ""
+            Column(
+                modifier = Modifier.padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
 
-                    onFinish()
+                // 🎳 TÍTULO
+                Text(
+                    text = "🎳 Nueva Reserva",
+                    style = MaterialTheme.typography.headlineSmall
+                )
+
+                // 👤 CLIENTE
+                OutlinedTextField(
+                    value = client,
+                    onValueChange = {
+                        client = it
+                        clientError = it.isEmpty() || it.any { char -> char.isDigit() }
+                    },
+                    label = { Text("Cliente") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    isError = clientError
+                )
+
+                if (clientError) {
+                    Text(
+                        "Nombre inválido (no números)",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
+                // 📞 TELÉFONO
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = { phone = it },
+                    label = { Text("Teléfono") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                // 🎳 PISTA
+                OutlinedTextField(
+                    value = lane,
+                    onValueChange = { lane = it },
+                    label = { Text("Pista") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true
+                )
+
+                // 📅 FECHA
+                OutlinedTextField(
+                    value = date,
+                    onValueChange = {
+                        date = it
+                        dateError = !isValidDate(it) && it.isNotEmpty()
+                    },
+                    label = { Text("Fecha (dd/mm/yyyy)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    isError = dateError
+                )
+
+                if (dateError) {
+                    Text(
+                        "Formato inválido",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
+                // ⏰ HORA
+                OutlinedTextField(
+                    value = time,
+                    onValueChange = {
+                        time = it
+                        timeError = !isValidTime(it) && it.isNotEmpty()
+                    },
+                    label = { Text("Hora (HH:mm)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    singleLine = true,
+                    isError = timeError
+                )
+
+                if (timeError) {
+                    Text(
+                        "Hora inválida",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 💾 BOTÓN PRO
+                Button(
+                    onClick = {
+
+                        when {
+                            client.isEmpty() -> error = "El cliente es obligatorio"
+                            !isValidPhone(phone) -> error = "Teléfono inválido"
+                            lane.isEmpty() || lane.toIntOrNull() == null -> error = "Pista inválida"
+                            !isValidDate(date) -> error = "Fecha inválida (dd/mm/yyyy)"
+                            !isValidTime(time) -> error = "Hora inválida (HH:mm)"
+
+                            else -> {
+
+                                val exists = viewModel.reservations.any {
+                                    it.lane == lane.toInt() &&
+                                            it.date == date &&
+                                            it.time == time
+                                }
+
+                                if (exists) {
+                                    error = "Esa pista ya está reservada en ese horario"
+                                    return@Button
+                                }
+
+                                val reservation = Reservation(
+                                    id = System.currentTimeMillis().toInt(),
+                                    clientName = client,
+                                    phone = phone,
+                                    lane = lane.toInt(),
+                                    date = date,
+                                    time = time,
+                                    status = "Activa"
+                                )
+
+                                viewModel.addReservation(reservation)
+
+                                client = ""
+                                phone = ""
+                                lane = ""
+                                date = ""
+                                time = ""
+                                error = ""
+
+                                onFinish()
+                            }
+                        }
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("💾 Guardar Reserva")
+                }
+
+                // ⚠ ERROR PRO (CON FONDO)
+                if (error.isNotEmpty()) {
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.error.copy(alpha = 0.2f)
+                        )
+                    ) {
+                        Text(
+                            text = error,
+                            color = MaterialTheme.colorScheme.error,
+                            modifier = Modifier.padding(10.dp)
+                        )
+                    }
                 }
             }
-
-        }) {
-            Text("Guardar Reserva")
-        }
-
-        if (error.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(error, color = MaterialTheme.colorScheme.error)
         }
     }
 }
