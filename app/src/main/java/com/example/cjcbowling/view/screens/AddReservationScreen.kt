@@ -76,7 +76,6 @@ fun AddReservationScreen(
             .padding(16.dp)
     ) {
 
-        // 🧾 CARD PRINCIPAL (CONTRASTE PRO)
         Card(
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
@@ -91,13 +90,10 @@ fun AddReservationScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                // 🎳 TÍTULO
                 Text(
                     text = "🎳 Nueva Reserva",
                     style = MaterialTheme.typography.headlineSmall
                 )
-
-                // 👤 CLIENTE
                 OutlinedTextField(
                     value = client,
                     onValueChange = {
@@ -117,7 +113,6 @@ fun AddReservationScreen(
                     )
                 }
 
-                // 📞 TELÉFONO
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
@@ -126,7 +121,6 @@ fun AddReservationScreen(
                     singleLine = true
                 )
 
-                // 🎳 PISTA
                 OutlinedTextField(
                     value = lane,
                     onValueChange = { lane = it },
@@ -135,7 +129,6 @@ fun AddReservationScreen(
                     singleLine = true
                 )
 
-                // 📅 FECHA
                 OutlinedTextField(
                     value = date,
                     onValueChange = {
@@ -155,7 +148,6 @@ fun AddReservationScreen(
                     )
                 }
 
-                // ⏰ HORA
                 OutlinedTextField(
                     value = time,
                     onValueChange = {
@@ -177,7 +169,6 @@ fun AddReservationScreen(
 
                 Spacer(modifier = Modifier.height(8.dp))
 
-                // 💾 BOTÓN PRO
                 Button(
                     onClick = {
 
@@ -229,7 +220,6 @@ fun AddReservationScreen(
                     Text("💾 Guardar Reserva")
                 }
 
-                // ⚠ ERROR PRO (CON FONDO)
                 if (error.isNotEmpty()) {
                     Card(
                         colors = CardDefaults.cardColors(

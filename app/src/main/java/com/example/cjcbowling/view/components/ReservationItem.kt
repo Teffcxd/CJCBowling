@@ -31,7 +31,6 @@ fun ReservationItem(
 
         Column(modifier = Modifier.padding(16.dp)) {
 
-            // Nombre del cliente (destacado)
             Text(
                 text = reservation.clientName,
                 style = MaterialTheme.typography.titleMedium
@@ -39,7 +38,6 @@ fun ReservationItem(
 
             Spacer(modifier = Modifier.height(6.dp))
 
-            // Info secundaria
             Text("📅 Fecha: ${reservation.date} ")
             Text("⌚ Hora: ${reservation.time}")
             Text("🎳 Pista: ${reservation.lane}")
@@ -47,7 +45,6 @@ fun ReservationItem(
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Estado con color
             val statusColor = when (reservation.status) {
                 "Activa" -> androidx.compose.ui.graphics.Color(0xFF2ECC71)
                 else -> androidx.compose.ui.graphics.Color(0xFF95A5A6)
@@ -66,7 +63,6 @@ fun ReservationItem(
 
             Spacer(modifier = Modifier.height(10.dp))
 
-            // Botones alineados a la derecha
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxWidth()

@@ -22,14 +22,12 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
     val total = reservations.size
     val active = reservations.count { it.status == "Activa" }
     val finished = reservations.count { it.status == "Finalizada" }
-
-    // 🔥 NUEVO: Próxima reserva
     val nextReservation = reservations
         .filter { it.status == "Activa" }
         .minByOrNull { it.date + it.time }
 
-    // 🔥 NUEVO: Reservas de hoy (simple)
-    val today = "18/03/2026" // luego lo puedes hacer dinámico
+
+    val today = "19/03/2026"
     val todayReservations = reservations.filter { it.date == today }
 
     when (screen) {
@@ -61,7 +59,6 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
                         color = Color.White
                     )
 
-                    // 👋 NUEVO: Bienvenida
                     Text(
                         text = "👋 Bienvenido",
                         color = Color.White
@@ -72,7 +69,6 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
                         color = Color.White
                     )
 
-                    // 🎯 NUEVO: Próxima reserva
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(10.dp)
@@ -119,7 +115,6 @@ fun DashboardScreen(viewModel: ReservationViewModel) {
                         }
                     }
 
-                    // 📅 NUEVO: reservas de hoy
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         elevation = CardDefaults.cardElevation(8.dp)

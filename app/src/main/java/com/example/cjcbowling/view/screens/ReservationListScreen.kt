@@ -21,10 +21,7 @@ fun ReservationListScreen(
 ) {
 
     var search by remember { mutableStateOf("") }
-
     val reservations = viewModel.reservations
-
-    // 🔎 FILTRO LOCAL (MEJOR QUE EN VIEWMODEL)
     val filteredReservations = reservations.filter {
         it.clientName.contains(search, ignoreCase = true) ||
                 it.phone.contains(search) ||
@@ -50,8 +47,6 @@ fun ReservationListScreen(
         Column(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
-            // 🔍 BUSCADOR BONITO
             Card(
                 modifier = Modifier.fillMaxWidth(),
                 elevation = CardDefaults.cardElevation(10.dp),
@@ -70,7 +65,6 @@ fun ReservationListScreen(
                 )
             }
 
-            // ⚠ MENSAJE SI NO HAY RESULTADOS
             if (filteredReservations.isEmpty()) {
                 Card(
                     colors = CardDefaults.cardColors(
@@ -84,7 +78,6 @@ fun ReservationListScreen(
                 }
             }
 
-            // 📋 LISTA
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
                 modifier = Modifier.fillMaxSize()
