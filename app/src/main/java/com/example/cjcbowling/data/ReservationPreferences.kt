@@ -13,9 +13,7 @@ class ReservationPreferences(context: Context) {
     fun getReservations(): MutableList<Reservation> {
 
         val json = prefs.getString("reservations", "[]")
-
         val list = mutableListOf<Reservation>()
-
         val jsonArray = JSONArray(json)
 
         for (i in 0 until jsonArray.length()) {

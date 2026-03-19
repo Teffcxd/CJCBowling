@@ -31,7 +31,6 @@ fun EditReservationScreen(
     var timeError by remember { mutableStateOf(false) }
     var clientError by remember { mutableStateOf(false) }
 
-    // 🌈 Fondo
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -58,13 +57,11 @@ fun EditReservationScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
 
-                // 🎳 Título llamativo
                 Text(
                     text = "🎳 Editar Reserva",
                     style = MaterialTheme.typography.headlineSmall
                 )
 
-                // 👤 Cliente
                 OutlinedTextField(
                     value = client,
                     onValueChange = {
@@ -81,7 +78,6 @@ fun EditReservationScreen(
                     Text("Nombre inválido", color = MaterialTheme.colorScheme.error)
                 }
 
-                // 📞 Teléfono
                 OutlinedTextField(
                     value = phone,
                     onValueChange = { phone = it },
@@ -90,7 +86,6 @@ fun EditReservationScreen(
                     singleLine = true
                 )
 
-                // 🎳 Pista
                 OutlinedTextField(
                     value = lane,
                     onValueChange = { lane = it },
@@ -99,7 +94,6 @@ fun EditReservationScreen(
                     singleLine = true
                 )
 
-                // 📅 Fecha
                 OutlinedTextField(
                     value = date,
                     onValueChange = {
@@ -116,7 +110,6 @@ fun EditReservationScreen(
                     Text("Fecha inválida", color = MaterialTheme.colorScheme.error)
                 }
 
-                // ⏰ Hora
                 OutlinedTextField(
                     value = time,
                     onValueChange = {
@@ -133,7 +126,6 @@ fun EditReservationScreen(
                     Text("Hora inválida", color = MaterialTheme.colorScheme.error)
                 }
 
-                // 🔄 Estado
                 Text("Estado", style = MaterialTheme.typography.titleMedium)
 
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -163,7 +155,6 @@ fun EditReservationScreen(
 
                 Spacer(modifier = Modifier.height(10.dp))
 
-                // 💾 Botón
                 Button(
                     onClick = {
                         when {
